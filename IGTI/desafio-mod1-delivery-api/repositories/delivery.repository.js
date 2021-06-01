@@ -37,6 +37,39 @@ async function criarPedido(pedido) {
     return pedido;
 }
 
+async function atualizarPedido(id, pedido) {
+    const data = JSON.parse(await readFile(nomeArquivo));
+    const index = data.pedidos.findIndex(p => p.id === id);
+    if (index === -1) {
+        throw new Error("Pedido não encontrado.");
+    }
+    data.pedidos[index] = Object.assign(data.pedidos[index], pedido);
+    await writeFile(nomeArquivo, JSON.stringify(data, null, 2));
+
+    return data.pedidos[index];
+}
+
+async function atualizarEntrega(id, entregue) {
+    const data = JSON.parse(await readFile(nomeArquivo));
+    const index = data.pedidos.findIndex(p => p.id === id);
+    if (index === -1) {
+        throw new Error("Pedido não encontrado.");
+    }
+    data.pedidos[index].entregue = entregue;
+    await writeFile(nomeArquivo, JSON.stringify(data, null, 2));
+
+    return data.pedidos[index];
+}
+
+async function excluirPedido(id) {
+    const data = JSON.parse(await readFile(nomeArquivo));
+    data.pedidos = data.pedidos.filter(account => account.id !== id);
+    await writeFile(nomeArquivo, JSON.stringify(data, null, 2));
+}
+
 export default {
-    criarPedido
+    criarPedido,
+    atualizarPedido,
+    atualizarEntrega,
+    excluirPedido
 }

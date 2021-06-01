@@ -4,6 +4,9 @@ import DeliveryController from "../controllers/delivery.controller.js";
 const router = express.Router()
 
 router.post("/", DeliveryController.criarPedido);
+router.put("/:id", DeliveryController.atualizarPedido);
+router.patch("/:id", DeliveryController.atualizarEntrega);
+router.delete("/:id", DeliveryController.excluirPedido);
 
 
 router.use((err, req, res, next) => {
