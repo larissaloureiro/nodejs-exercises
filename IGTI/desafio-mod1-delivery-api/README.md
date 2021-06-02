@@ -13,7 +13,7 @@ Um pedido deve possuir os campos abaixo:
 * Entregue (boolean): indica se o pedido já foi entregue (true = foi entregue, false = ainda não foi entregue). Exemplo: true.
 * Timestamp (string): horário de criação do pedido. Exemplo: 2020-05-19T18:21:24.964Z. Dica: utilizar o “new Date()” do JavaScript.
 
-O arquivo pedidos.json será previamente fornecido com alguns registros inseridos. Seus endpoints devem trabalhar considerando a existência deles, não devendo ser criado um arquivo limpo para utilização. A estrutura do arquivo é a seguinte:
+O arquivo pedidos.json será previamente fornecido com alguns registros inseridos. Seus endpoints devem trabalhar considerando a existência deles, não devendo ser criado um arquivo limpo para utilização.
 
 A propriedade “nextId” deve armazenar sempre o próximo id que será utilizado na criação de um novo pedido. A propriedade “pedidos” possui um array com vários pedidos, cada um sendo representado por um objeto com os campos descritos anteriormente. Para facilitar a criação da API, cada pedido possui somente um produto vinculado.
 
