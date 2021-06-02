@@ -37,6 +37,57 @@ async function criarPedido(pedido) {
     return pedido;
 }
 
+async function atualizarPedido(id, pedido) {
+    const data = JSON.parse(await readFile(nomeArquivo));
+    const index = data.pedidos.findIndex(p => p.id === id);
+    if (index === -1) {
+        throw new Error("Pedido não encontrado.");
+    }
+    data.pedidos[index] = Object.assign(data.pedidos[index], pedido);
+    await writeFile(nomeArquivo, JSON.stringify(data, null, 2));
+
+    return data.pedidos[index];
+}
+
+async function atualizarEntrega(id, entregue) {
+    const data = JSON.parse(await readFile(nomeArquivo));
+    const index = data.pedidos.findIndex(p => p.id === id);
+    if (index === -1) {
+        throw new Error("Pedido não encontrado.");
+    }
+    data.pedidos[index].entregue = entregue;
+    await writeFile(nomeArquivo, JSON.stringify(data, null, 2));
+
+    return data.pedidos[index];
+}
+
+async function excluirPedido(id) {
+    const data = JSON.parse(await readFile(nomeArquivo));
+
+    data.pedidos = data.pedidos.filter(pedido => pedido.id !== id);
+    await writeFile(nomeArquivo, JSON.stringify(data, null, 2));
+}
+
+async function consultaPedido(id) {
+    const data = JSON.parse(await readFile(nomeArquivo));
+    const pedido = data.pedidos.find(pedido => pedido.id === id);
+    if (pedido) {
+        return pedido;
+    }
+    throw new Error("Pedido não encontrado.");    
+}
+
+async function pedidosEntregues() {
+    const data = JSON.parse(await readFile(nomeArquivo));
+    let pedidosEntregues = data.pedidos.filter(pedido => pedido.entregue);
+    return pedidosEntregues;
+}
+
 export default {
-    criarPedido
+    criarPedido,
+    atualizarPedido,
+    atualizarEntrega,
+    excluirPedido,
+    consultaPedido,
+    pedidosEntregues
 }
