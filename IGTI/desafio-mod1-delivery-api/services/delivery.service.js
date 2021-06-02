@@ -21,7 +21,8 @@ async function consultaPedido(id) {
 }
 
 async function consultaCliente(cliente) {
-    const pedidosCliente = await DeliveryRepository.consultaCliente(cliente);
+    const pedidosEntregues = await DeliveryRepository.pedidosEntregues();
+    const pedidosCliente = pedidosEntregues.filter(pedido => pedido.cliente === cliente);
     let valorTotal = pedidosCliente.reduce((valorTotal, pedido) => valorTotal + pedido.valor, 0);
     /* === Mesma coisa que a linha de cima ===
     let valorTotal = 0;
@@ -32,11 +33,39 @@ async function consultaCliente(cliente) {
     return valorTotal;
 }
 
+async function consultaProduto(produto) {
+    const pedidosEntregues = await DeliveryRepository.pedidosEntregues();
+    const pedidosProduto = pedidosEntregues.filter(pedido => pedido.produto === produto)
+    let valorTotal = pedidosProduto.reduce((valorTotal, pedido) => valorTotal + pedido.valor, 0);
+    return valorTotal;
+}
+
+async function maisVendidos() {
+    const pedidosEntregues = await DeliveryRepository.pedidosEntregues();
+    let listaProdutos = [];
+    pedidosEntregues.forEach(pedido => {
+        const index = listaProdutos.findIndex(produto => produto.nome === pedido.produto);
+        if (index === -1) {
+            let item = { nome: pedido.produto, quantidade: 1};
+            listaProdutos.push(item);
+        } else {
+            listaProdutos[index].quantidade++;
+        }
+    });
+    listaProdutos.sort((a, b) => b.quantidade - a.quantidade);
+    listaProdutos = listaProdutos.map(produto => {
+        return produto.nome + " - " + produto.quantidade;
+    });
+    return listaProdutos;
+}
+
 export default {
     criarPedido,
     atualizarPedido,
     atualizarEntrega,
     excluirPedido,
     consultaPedido,
-    consultaCliente
+    consultaCliente,
+    consultaProduto,
+    maisVendidos
 }

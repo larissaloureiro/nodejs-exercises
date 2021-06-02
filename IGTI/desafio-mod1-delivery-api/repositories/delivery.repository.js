@@ -77,10 +77,10 @@ async function consultaPedido(id) {
     throw new Error("Pedido não encontrado.");    
 }
 
-async function consultaCliente(cliente) {
+async function pedidosEntregues() {
     const data = JSON.parse(await readFile(nomeArquivo));
-    const pedidosCliente = data.pedidos.filter(pedido => pedido.cliente === cliente && pedido.entregue);
-    return pedidosCliente;
+    let pedidosEntregues = data.pedidos.filter(pedido => pedido.entregue);
+    return pedidosEntregues;
 }
 
 export default {
@@ -89,5 +89,5 @@ export default {
     atualizarEntrega,
     excluirPedido,
     consultaPedido,
-    consultaCliente
+    pedidosEntregues
 }

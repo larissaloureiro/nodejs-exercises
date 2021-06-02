@@ -84,7 +84,25 @@ async function consultaCliente(req, res, next) {
     }
 }
 
+async function consultaProduto(req, res, next) {
+    try {
+        const produto = req.query.nome;
+        let valorTotal = (await DeliveryServices.consultaProduto(produto)).toFixed(2);
+        res.send(valorTotal);
+        logger.info("GET /pedidos/produto");
+    } catch (err) {
+        next(err);
+    }
+}
 
+async function maisVendidos(req, res, next) {
+    try {
+        res.send(await DeliveryServices.maisVendidos());
+        logger.info("GET /pedidos/maisVendidos");
+    } catch (err) {
+        next(err);
+    }
+}
 
 export default {
     criarPedido,
@@ -92,5 +110,7 @@ export default {
     atualizarEntrega,
     excluirPedido,
     consultaPedido,
-    consultaCliente
+    consultaCliente,
+    consultaProduto,
+    maisVendidos
 }
