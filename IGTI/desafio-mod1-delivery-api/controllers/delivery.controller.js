@@ -27,7 +27,7 @@ async function atualizarPedido(req, res, next) {
         if (!id || !pedido.cliente || !pedido.produto || pedido.valor == null) {
             throw new Error("Id, Cliente, Produto e Valor são obrigatórios.");
         }
-        pedido = await DeliveryServices.atualizarPedido(id, permitidosAtualizar(pedido))
+        pedido = await DeliveryServices.atualizarPedido(id, permitidosAtualizar(pedido));
         res.send(pedido);
         logger.info(`PUT /pedidos/:id - ${JSON.stringify(pedido)}`);
     } catch (err) {
@@ -43,7 +43,7 @@ async function atualizarEntrega(req, res, next) {
         if (!id || typeof pedido.entregue !== "boolean") {
             throw new Error("Id e Entregue são obrigatórios.");
         }
-        pedido = await DeliveryServices.atualizarEntrega(id, pedido.entregue)
+        pedido = await DeliveryServices.atualizarEntrega(id, pedido.entregue);
         res.send(pedido);
 
         logger.info(`PATCH /pedidos/:id - ${JSON.stringify(pedido)}`);
@@ -57,15 +57,40 @@ async function excluirPedido(req, res, next) {
         const id = parseInt(req.params.id, 10);
         await DeliveryServices.excluirPedido(id);
         res.end();
-        logger.info(`DELETE /account/:id - ${req.params.id}`);
+        logger.info(`DELETE /pedidos/:id - ${req.params.id}`);
     } catch (err) {
         next(err);
     }
 }
 
+async function consultaPedido(req, res, next) {
+    try {
+        const id = parseInt(req.params.id, 10);
+        res.send(await DeliveryServices.consultaPedido(id));
+        logger.info("GET /pedidos/:id");
+    } catch (err) {
+        next(err);
+    }
+}
+
+async function consultaCliente(req, res, next) {
+    try {
+        const cliente = req.query.nome;
+        let valorTotal = (await DeliveryServices.consultaCliente(cliente)).toFixed(2);
+        res.send(`Valor total do cliente ${cliente} é R$ ${valorTotal}`);
+        logger.info("GET /pedidos/cliente");
+    } catch (err) {
+        next(err);
+    }
+}
+
+
+
 export default {
     criarPedido,
     atualizarPedido,
     atualizarEntrega,
-    excluirPedido
+    excluirPedido,
+    consultaPedido,
+    consultaCliente
 }

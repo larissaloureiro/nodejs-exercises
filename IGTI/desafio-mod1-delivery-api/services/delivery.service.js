@@ -16,9 +16,27 @@ async function excluirPedido(id) {
     return await DeliveryRepository.excluirPedido(id);
 }
 
+async function consultaPedido(id) {
+    return await DeliveryRepository.consultaPedido(id);
+}
+
+async function consultaCliente(cliente) {
+    const pedidosCliente = await DeliveryRepository.consultaCliente(cliente);
+    let valorTotal = pedidosCliente.reduce((valorTotal, pedido) => valorTotal + pedido.valor, 0);
+    /* === Mesma coisa que a linha de cima ===
+    let valorTotal = 0;
+    pedidosCliente.forEach(pedido => {
+        valorTotal += pedido.valor;
+    });
+    */
+    return valorTotal;
+}
+
 export default {
     criarPedido,
     atualizarPedido,
     atualizarEntrega,
-    excluirPedido
+    excluirPedido,
+    consultaPedido,
+    consultaCliente
 }
